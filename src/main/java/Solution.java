@@ -1,8 +1,6 @@
 import java.util.*;
 
 public class Solution {
-    private Map<Character, List<Integer>> map = null;
-
     public boolean isSubsequence(String s, String t) {
         if (s.isEmpty()) return true;
         int subIterate = 0;
@@ -17,19 +15,21 @@ public class Solution {
         return false;
     }
 
+    private Map<Character, List<Integer>> map = null;
+
     public boolean isSubsequenceDP(String s, String t) {
         if (s.isEmpty()) return true;
         if (t.isEmpty()) return false;
         fillMap(t);
         int prev = -1;
         for (int i = 0; i < s.length(); i++) {
-            if (!map.containsKey(s.charAt(i))) return false;
-            List<Integer> list = map.get(s.charAt(i));
-            int current = upperBound(list, prev);
+            if (!map.containsKey(s.charAt(i))) return false; // if HashMap not contains char from s - it is not a subsequence
+            List<Integer> list = map.get(s.charAt(i));      // For character in s, get the list of its occurrences in t
+            int current = upperBound(list, prev);           // Check if char from s has saved index in List not less, then previously matched char
             if (current == -1) {
                 return false;
             }
-            prev = current;
+            prev = current; // Save the index where the current character was found in t
         }
         return true;
 
@@ -49,18 +49,18 @@ public class Solution {
 
     public static Integer upperBound(List<Integer> arr, int target) {
         int low = 0;
-        int high = arr.size(); // Включаем длину массива для корректного выхода
+        int high = arr.size();
 
         while (low < high) {
             int mid = low + (high - low) / 2;
 
             if (arr.get(mid) <= target) {
-                low = mid + 1; // Ищем в правой половине
+                low = mid + 1; // will search in right half
             } else {
-                high = mid;    // Ищем левее, но mid остается кандидатом
+                high = mid;    // Search in left half, mid will be included
             }
         }
-        return low; // Индекс первого элемента, который > target
+        return low; // index of first element that > target
     }
 
 }

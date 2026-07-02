@@ -23,15 +23,29 @@ Constraints:
 s and t consist only of lowercase English letters.
 
 
-_Follow up: Suppose there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to see if t has its subsequence. In this scenario, how would you change your code?_
+_Follow up: Suppose there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to
+see if t has its subsequence. In this scenario, how would you change your code?_
 
-### Solutions
-Straightforward solution is pretty easy - you can see it in isSubsequence() method. The time complexity is O(m + n). 
-Where m and n are the lengths of the strings s and t respectively.
+## Solutions
+### 1.Two pointers 
+The straightforward solution is quite simple - you can see it in the ```isSubsequence()``` method. We have pointer
+```subIterate```, that tracks the current "successful" position in the string s.
+And just iterate t string, if current char from s equals char from t, we note to use next char from s on next t iteration step
+(increase pointer subIterate). If subIterate reach length of s, then s is a subsequence of t.
 
-For second scenario - when string t is permanent, we can get O(n) for preparing additional map. And O(n log(k)) for solving task. k - is the average number of occurrences of each character in t.
+### Complexity
+The time complexity is O(n). Where n is the lengths of the string t.  
+The size complexity - O(1).
 
-From t make additional map<Character, list<Integer> where key - each of char t, and value - List of places that char in string t.:
+### 2. Preprocessing + Binary Search
+### Complexity
+For second scenario - when string t is permanent, we can get O(n) for preparing additional map.
+And O(n log(k)) for solving task. k - is the average number of occurrences of each character in t.
+log(p) - the binary search complexity.
+
+### Approach
+From t make additional map<Character, list<Integer>, where key - each of char t, and value - List of places that char in
+string t.:
 ```
 "abayxca":  
 'a' -> [0,2,6]  
@@ -40,7 +54,10 @@ From t make additional map<Character, list<Integer> where key - each of char t, 
 'x' -> [4]  
 'c' -> [5]
 ```
-then iterate char in string s and find it in HahMap. For cases when we try find same char few times we save previous found position in ```int prev``` and find next char only in that part of List<Integer> of map, that index more then prev.
-For that we use binnary find like upperBound.  
-For example in case ```s = "aya"``` when we will find last a, our prev will be 3 (result for searching y), so we will use only [..., 6] part from 'a' -> [0,2,6].
+then iterate chars in string s and find it in HashMap. If char don't exist in hashMap - it is not subsequence.
+We save previous found position in ```prev``` variable and find next 
+char only in that part of List<Integer> of map, that index more than prev.
+For that we use binnary search like upperBound.  
+For example in case ```s = "aya"``` when we will find last a, our prev will be 3 (result for searching y), so we will use
+only [..., 6] part from 'a' -> [0,2,6].
 Full explanation you can see here https://leetcode.ca/2016-12-26-392-Is-Subsequence/
